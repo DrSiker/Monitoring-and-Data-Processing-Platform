@@ -24,7 +24,8 @@ jobs:
           pip install pytest
 
       - name: 🧪 Run Pytest
-        run: pytest tests/
+        run: PYTHONPATH=$PWD pytest tests/
+        
 
   build:
     name: 🏗️ Build & Push Docker Image
