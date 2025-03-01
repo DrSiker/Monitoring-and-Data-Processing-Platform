@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, JSON
-from database import Base
+from api.database import Base
 
 class Metadata(Base):
     __tablename__ = "metadata"
