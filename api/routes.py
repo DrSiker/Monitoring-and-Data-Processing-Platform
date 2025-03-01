@@ -3,8 +3,8 @@ import pandas as pd
 from sqlalchemy.orm import Session
 import io
 import logging
-from database import SessionLocal, engine, Base
-from models import Metadata, DynamicData
+from api.database import SessionLocal, engine, Base
+from api.models import Metadata, DynamicData
 
 logger = logging.getLogger(__name__)
 
