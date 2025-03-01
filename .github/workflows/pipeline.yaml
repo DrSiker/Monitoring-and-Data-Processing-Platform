@@ -6,7 +6,29 @@ on:
       - main
 
 jobs:
+  test:
+    name: 🧪 Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout Code
+        uses: actions/checkout@v2
+
+      - name: 🐍 Set Up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install -r libraries.txt
+          pip install pytest
+
+      - name: 🧪 Run Pytest
+        run: pytest tests/
+
   build:
+    name: 🏗️ Build & Push Docker Image
+    needs: test  # Solo se ejecuta si las pruebas pasan
     runs-on: ubuntu-latest
     steps:
       - name: 🛎️ Checkout Code
@@ -15,17 +37,18 @@ jobs:
       - name: 🐳 Build Docker Image
         run: |
           docker build -t my-docker-repo/api:latest .
-      
+
       - name: 🔑 Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      
+
       - name: 📤 Push Image to Docker Hub
         run: |
           docker push my-docker-repo/api:latest
 
   deploy:
-    needs: build
+    name: 🚀 Deploy to Kubernetes
+    needs: build  # Solo se ejecuta si la imagen Docker se sube correctamente
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout Code
