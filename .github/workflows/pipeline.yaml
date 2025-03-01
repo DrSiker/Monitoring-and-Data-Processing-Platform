@@ -20,7 +20,7 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-          pip install -r libraries.txt
+          pip install -r api/libraries.txt
           pip install pytest
 
       - name: 🧪 Run Pytest
