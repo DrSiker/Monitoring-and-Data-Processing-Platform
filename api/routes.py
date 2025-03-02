@@ -5,12 +5,19 @@ import io
 import logging
 from api.database import SessionLocal, engine, Base
 from api.models import Metadata, DynamicData
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
 
 router = APIRouter()
 
 Base.metadata.create_all(bind=engine)
+
+REQUEST_COUNT = Counter("http_requests_total", "Total de solicitudes HTTP", ["method", "endpoint"])
+UPLOAD_SUCCESS = Counter("upload_csv_success_total", "Total de archivos CSV subidos con éxito")
+UPLOAD_FAILURE = Counter("upload_csv_failure_total", "Total de errores en carga de archivos CSV")
 
 def get_db():
     db = SessionLocal()
@@ -45,3 +52,7 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
 def get_data(db: Session = Depends(get_db)):
     data = db.query(DynamicData).all()
     return [entry.data for entry in data]
+
+@router.get("/metrics")
+def metrics():
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
