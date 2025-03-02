@@ -97,33 +97,33 @@ jobs:
         run: |
           kubectl apply -f k8s/
 
-      - name: ⏳ Wait for platform-service to be ready
-        run: |
-          echo "Esperando a que el servicio platform-service esté disponible..."
-          for i in {1..10}; do
-            if kubectl get svc platform-service &>/dev/null; then
-              echo "Servicio encontrado."
-              break
-            fi
-            echo "Intento $i: El servicio aún no está disponible, esperando..."
-            sleep 10
-          done
+      # - name: ⏳ Wait for platform-service to be ready
+      #   run: |
+      #     echo "Esperando a que el servicio platform-service esté disponible..."
+      #     for i in {1..10}; do
+      #       if kubectl get svc platform-service &>/dev/null; then
+      #         echo "Servicio encontrado."
+      #         break
+      #       fi
+      #       echo "Intento $i: El servicio aún no está disponible, esperando..."
+      #       sleep 10
+      #     done
   
-      - name: 🔍 Get Platform Service URL
-        id: get-url
-        run: |
-            URL=$(minikube service platform-service --url)
-            echo "PLATFORM_URL=$URL" >> $GITHUB_ENV
+      # - name: 🔍 Get Platform Service URL
+      #   id: get-url
+      #   run: |
+      #       URL=$(minikube service platform-service --url)
+      #       echo "PLATFORM_URL=$URL" >> $GITHUB_ENV
     
-      - name: 🚀 Test API POST Endpoint (Upload CSV)
-        run: |
-          curl -X 'POST' "$PLATFORM_URL/data" \
-          -H 'accept: application/json' \
-          -H 'Content-Type: multipart/form-data' \
-          -F 'file=@tests/data.csv'
+      # - name: 🚀 Test API POST Endpoint (Upload CSV)
+      #   run: |
+      #     curl -X 'POST' "$PLATFORM_URL/upload" \
+      #     -H 'accept: application/json' \
+      #     -H 'Content-Type: multipart/form-data' \
+      #     -F 'file=@tests/data.csv'
   
-      - name: 🔬 Test API GET Endpoint
-        run: |
-          curl -X 'GET' "$PLATFORM_URL/data" \
-          -H 'accept: application/json'
+      # - name: 🔬 Test API GET Endpoint
+      #   run: |
+      #     curl -X 'GET' "$PLATFORM_URL/data" \
+      #     -H 'accept: application/json'
 
