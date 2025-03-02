@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: platform
-        image: platform:latest  
+        image: platform:latest
+        imagePullPolicy: IfNotPresent  
         ports:
         - containerPort: 8000
         envFrom:
