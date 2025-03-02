@@ -17,13 +17,21 @@ spec:
           image: grafana/promtail:latest
           args:
             - "-config.file=/etc/promtail/promtail-config.yaml"
+            - "-config.expand-env=true"
           volumeMounts:
             - name: promtail-config
               mountPath: /etc/promtail
+            - name: varlog
+              mountPath: /var/log
+              readOnly: true
       volumes:
         - name: promtail-config
           configMap:
             name: promtail-config
+        - name: varlog
+          hostPath:
+            path: /var/log
+            type: Directory
 ---
 apiVersion: v1
 kind: Service
