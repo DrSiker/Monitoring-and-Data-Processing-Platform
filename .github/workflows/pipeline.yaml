@@ -96,3 +96,22 @@ jobs:
       - name: 📥 Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/
+
+      - name: 🔍 Get Platform Service URL
+        id: get-url
+        run: |
+            URL=$(minikube service platform-service --url)
+            echo "PLATFORM_URL=$URL" >> $GITHUB_ENV
+    
+      - name: 🚀 Test API POST Endpoint (Upload CSV)
+        run: |
+          curl -X 'POST' "$PLATFORM_URL/data" \
+          -H 'accept: application/json' \
+          -H 'Content-Type: multipart/form-data' \
+          -F 'file=@tests/data.csv'
+  
+      - name: 🔬 Test API GET Endpoint
+        run: |
+          curl -X 'GET' "$PLATFORM_URL/data" \
+          -H 'accept: application/json'
+
