@@ -1,11 +1,17 @@
-global:
-  scrape_interval: 15s  # Frecuencia de recolección de métricas
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s # Frecuencia de recolección de métricas
 
-scrape_configs:
-  - job_name: 'api-monitoring'
-    static_configs:
-      - targets: ['api-service.default.svc.cluster.local:8000']
+    scrape_configs:
+      - job_name: 'api-monitoring'
+        static_configs:
+          - targets: ['api-service.default.svc.cluster.local:8000']
 
-  - job_name: 'database-monitoring'
-    static_configs:
-      - targets: ['db-service.default.svc.cluster.local:5432']
+      - job_name: 'database-monitoring'
+        static_configs:
+          - targets: ['db-service.default.svc.cluster.local:5432']
