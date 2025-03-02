@@ -97,6 +97,13 @@ jobs:
         run: |
           kubectl apply -f k8s/
 
+      - name: Desplegar Prometheus
+        run: kubectl apply -f monitoring/prometheus-deploy.yaml
+
+      - name: Desplegar Grafana
+        run: kubectl apply -f monitoring/grafana-deploy.yaml
+      
+
       # - name: ⏳ Wait for platform-service to be ready
       #   run: |
       #     echo "Esperando a que el servicio platform-service esté disponible..."
