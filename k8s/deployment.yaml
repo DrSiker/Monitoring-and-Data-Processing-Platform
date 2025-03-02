@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: platform-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: platform
   template:
     metadata:
       labels:
-        app: api
+        app: platform
     spec:
       containers:
-      - name: api
-        image: my-docker-repo/api:latest
+      - name: platform
+        image: platform:latest  
         ports:
         - containerPort: 8000
         envFrom:
         - configMapRef:
-            name: api-config
+            name: platform-config
+        resources:
+          limits:
+            cpu: "500m"      
+            memory: "512Mi"  
+          requests:
+            cpu: "250m"       
+            memory: "256Mi"   
