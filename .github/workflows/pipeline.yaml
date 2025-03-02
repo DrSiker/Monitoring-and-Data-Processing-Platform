@@ -83,6 +83,16 @@ jobs:
         with:
           version: 'v1.28.2'
 
-      - name: 🚀 Deploy to Kubernetes
+      - name: 🏗️ Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+      - name: 🚀 Start Minikube
+        run: |
+          minikube start --driver=docker
+          kubectl cluster-info
+
+      - name: 📥 Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/
